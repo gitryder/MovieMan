@@ -35,6 +35,7 @@
             android:id="@+id/ivBackdrop"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:transitionName="@string/transition_backdrop"
             app:layout_constraintDimensionRatio="1,2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

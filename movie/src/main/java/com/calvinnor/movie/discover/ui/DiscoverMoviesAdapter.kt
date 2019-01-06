@@ -3,6 +3,7 @@ package com.calvinnor.movie.discover.ui
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.RecyclerView
 import com.calvinnor.core.extensions.ScaleType
 import com.calvinnor.core.extensions.inflate
@@ -42,7 +43,11 @@ class DiscoverMoviesAdapter : RecyclerView.Adapter<DiscoverMoviesAdapter.MovieVi
 
                 findNavController().navigate(
                     R.id.navigateToMovieDetails,
-                    MovieDetailsFragment.getBundle(movieId = uiModel.id)
+                    MovieDetailsFragment.getBundle(movieId = uiModel.id),
+                    null,
+                    FragmentNavigatorExtras(
+                        ivBackdrop to context.getString(R.string.transition_backdrop)
+                    )
                 )
             }
         }

@@ -3,10 +3,13 @@ package com.calvinnor.movie.details.ui
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.view.doOnPreDraw
 import androidx.core.view.isVisible
 import androidx.palette.graphics.Palette
+import androidx.transition.TransitionInflater
 import com.calvinnor.core.domain.Result
 import com.calvinnor.core.extensions.ScaleType
 import com.calvinnor.core.extensions.observe
@@ -32,6 +35,18 @@ class MovieDetailsFragment : BaseFragment() {
         }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        sharedElementEnterTransition =
+                TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+                    .apply {
+                        duration = 5000
+                    }
+
+        postponeEnterTransition()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -47,6 +62,10 @@ class MovieDetailsFragment : BaseFragment() {
                 is Result.Success -> {
                     showLoading(false)
                     setData(it.data)
+
+                    (view?.parent as? ViewGroup)?.doOnPreDraw {
+                        startPostponedEnterTransition()
+                    }
                 }
 
                 is Result.Failure -> showError(it.ex)
@@ -86,7 +105,7 @@ class MovieDetailsFragment : BaseFragment() {
         Palette.from(bitmap).generate { palette ->
             palette?.getDarkVibrantColor(ContextCompat.getColor(context!!, R.color.black_65))?.let {
                 fadeColors(from = ContextCompat.getColor(context!!, R.color.black_65), to = it) {
-                    nsvParent.setBackgroundColor(it)
+                    nsvParent?.setBackgroundColor(it)
                 }
             }
         }
